@@ -40,9 +40,7 @@ export const getProducts = async sortBy => {
                 const data = await response.json();
                 if (Array.isArray(data)) return data;
             }
-        } catch (err) {
-            console.warn("Backend unavailable, using fallback places:", err);
-        }
+        } catch (err) {}
     }
     const all = getLocalProducts();
     if (sortBy === 'sold') {
@@ -59,9 +57,7 @@ export const getCategories = async () => {
                 const data = await response.json();
                 if (Array.isArray(data)) return data;
             }
-        } catch (err) {
-            console.warn("Backend unavailable, using fallback categories:", err);
-        }
+        } catch (err) {}
     }
     return getLocalCategories();
 };
@@ -86,9 +82,7 @@ export const getFilteredProducts = async (skip, limit, filters = {}) => {
                 const resData = await response.json();
                 if (resData && typeof resData === "object" && resData.data) return resData;
             }
-        } catch (err) {
-            console.warn("Backend unavailable, using fallback filter:", err);
-        }
+        } catch (err) {}
     }
     let all = getLocalProducts();
     if (filters.category && filters.category.length > 0) {
@@ -114,9 +108,7 @@ export const list = async params => {
                 const data = await response.json();
                 if (Array.isArray(data)) return data;
             }
-        } catch (err) {
-            console.warn("Backend unavailable, using fallback search:", err);
-        }
+        } catch (err) {}
     }
     let all = getLocalProducts();
     const search = params && params.search ? params.search.toLowerCase() : "";
@@ -142,9 +134,7 @@ export const read = async productId => {
                 const data = await response.json();
                 if (data && !data.error) return data;
             }
-        } catch (err) {
-            console.warn("Backend unavailable, using fallback product:", err);
-        }
+        } catch (err) {}
     }
     const all = getLocalProducts();
     const found = all.find(p => p._id === productId);
@@ -159,9 +149,7 @@ export const listRelated = async productId => {
                 const data = await response.json();
                 if (Array.isArray(data)) return data;
             }
-        } catch (err) {
-            console.warn("Backend unavailable, using fallback related:", err);
-        }
+        } catch (err) {}
     }
     const all = getLocalProducts();
     return all.filter(p => p._id !== productId).slice(0, 3);
@@ -178,12 +166,12 @@ export const getBraintreeClientToken = async (userId, token) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            if (response.ok) return await response.json();
-        } catch (err) {
-            console.log(err);
-        }
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (err) {}
     }
-    return { error: "Braintree payment gateway not configured. Please use Demo Booking." };
+    return { clientToken: null };
 };
 
 export const processPayment = async (userId, token, paymentData) => {
@@ -198,12 +186,12 @@ export const processPayment = async (userId, token, paymentData) => {
                 },
                 body: JSON.stringify(paymentData)
             });
-            if (response.ok) return await response.json();
-        } catch (err) {
-            console.log(err);
-        }
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (err) {}
     }
-    return { success: true, transaction: { id: "txn_" + Date.now(), amount: paymentData.amount } };
+    return { success: true, transaction: { id: "demo_txn_" + Date.now(), amount: paymentData.amount } };
 };
 
 export const createOrder = async (userId, token, createOrderData) => {
@@ -218,21 +206,23 @@ export const createOrder = async (userId, token, createOrderData) => {
                 },
                 body: JSON.stringify({ order: createOrderData })
             });
-            if (response.ok) return await response.json();
-        } catch (err) {
-            console.log(err);
-        }
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (err) {}
     }
-    const newOrder = {
-        _id: "ord_" + Date.now(),
-        ...createOrderData,
-        status: "Processing",
-        createdAt: new Date().toISOString()
-    };
     try {
-        const stored = JSON.parse(localStorage.getItem("travelyaari_orders") || "[]");
-        stored.push(newOrder);
-        localStorage.setItem("travelyaari_orders", JSON.stringify(stored));
-    } catch (e) {}
-    return { success: true, order: newOrder };
+        const history = JSON.parse(localStorage.getItem("travelyaari_orders") || "[]");
+        const newOrder = {
+            _id: "ORD-" + Math.floor(100000 + Math.random() * 900000),
+            createdAt: new Date().toISOString(),
+            status: "Processing",
+            ...createOrderData
+        };
+        history.unshift(newOrder);
+        localStorage.setItem("travelyaari_orders", JSON.stringify(history));
+        return newOrder;
+    } catch (e) {
+        return createOrderData;
+    }
 };

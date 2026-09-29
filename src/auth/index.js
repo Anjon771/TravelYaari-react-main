@@ -12,9 +12,7 @@ export const signup = async user => {
                 body: JSON.stringify(user)
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend signup failed, using local registration:", err);
-        }
+        } catch (err) {}
     }
     // Local fallback signup
     if (!user.email || !user.password) {
@@ -52,9 +50,7 @@ export const signin = async user => {
                 body: JSON.stringify(user)
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend signin failed, using local signin:", err);
-        }
+        } catch (err) {}
     }
     // Local fallback signin
     if (!user.email || !user.password) {
@@ -87,7 +83,7 @@ export const signout = next => {
         if (API) {
             fetch(`${API}/signout`, {
                 method: 'GET'
-            }).catch(err => console.log(err));
+            }).catch(() => {});
         }
     }
 };

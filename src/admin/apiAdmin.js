@@ -56,9 +56,7 @@ export const createCategory = async (userId, token, category) => {
                 body: JSON.stringify(category)
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend createCategory unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const categories = getStoredCategories();
     const newCategory = {
@@ -83,14 +81,16 @@ export const updateCategory = async (categoryId, userId, token, category) => {
                 body: JSON.stringify(category)
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend updateCategory unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const categories = getStoredCategories();
-    const updated = categories.map(c => c._id === categoryId ? { ...c, ...category } : c);
-    saveStoredCategories(updated);
-    return { success: true };
+    const index = categories.findIndex(c => c._id === categoryId);
+    if (index !== -1) {
+        categories[index].name = category.name;
+        saveStoredCategories(categories);
+        return categories[index];
+    }
+    return { name: category.name };
 };
 
 export const createProduct = async (userId, token, product) => {
@@ -105,47 +105,48 @@ export const createProduct = async (userId, token, product) => {
                 body: product
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend createProduct unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const products = getStoredProducts();
-    // product might be FormData or plain object
-    let name = "New Place";
-    let description = "Scenic destination";
-    let price = 3000;
-    let category = "cat_hill";
-    let quantity = 10;
+    let name = "New Sanctuary Retreat";
+    let description = "Scenic retreat";
+    let price = 5000;
+    let category = "cat_mountains";
+    let quantity = 5;
+    let shipping = true;
+    let youtubelink = "";
+    let subname = "Boutique Stay";
+
     if (product instanceof FormData) {
         name = product.get("name") || name;
         description = product.get("description") || description;
         price = Number(product.get("price")) || price;
         category = product.get("category") || category;
         quantity = Number(product.get("quantity")) || quantity;
-    } else if (product && typeof product === "object") {
-        name = product.name || name;
-        description = product.description || description;
-        price = product.price || price;
-        category = product.category || category;
-        quantity = product.quantity || quantity;
+        shipping = product.get("shipping") === "1" || product.get("shipping") === true;
+        youtubelink = product.get("youtubelink") || youtubelink;
+        subname = product.get("subname") || subname;
     }
+
     const categories = getStoredCategories();
-    const catObj = categories.find(c => c._id === category) || { _id: category, name: "General" };
-    const newProduct = {
+    const catObj = categories.find(c => c._id === category) || { _id: category, name: "Boutique Escape" };
+
+    const newProd = {
         _id: "prod_" + Date.now(),
         name,
-        subname: "India",
+        subname,
         description,
         price,
         category: catObj,
         quantity,
         sold: 0,
-        createdAt: new Date().toISOString(),
-        youtubelink: "Wf5lYJ8dYpk"
+        shipping,
+        youtubelink,
+        createdAt: new Date().toISOString()
     };
-    products.push(newProduct);
+    products.unshift(newProd);
     saveStoredProducts(products);
-    return newProduct;
+    return newProd;
 };
 
 export const getCategory = async categoryId => {
@@ -153,12 +154,10 @@ export const getCategory = async categoryId => {
         try {
             const response = await fetch(`${API}/category/${categoryId}`, { method: 'GET' });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend getCategory unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const categories = getStoredCategories();
-    return categories.find(c => c._id === categoryId) || categories[0];
+    return categories.find(c => c._id === categoryId) || { _id: categoryId, name: "Category" };
 };
 
 export const getCategories = async () => {
@@ -166,9 +165,7 @@ export const getCategories = async () => {
         try {
             const response = await fetch(`${API}/categories`, { method: 'GET' });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend getCategories unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     return getStoredCategories();
 };
@@ -184,9 +181,7 @@ export const listOrders = async (userId, token) => {
                 }
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend listOrders unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     return getStoredOrders();
 };
@@ -202,9 +197,7 @@ export const getStatusValues = async (userId, token) => {
                 }
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend getStatusValues unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     return ["Not processed", "Processing", "Shipped", "Delivered", "Cancelled"];
 };
@@ -222,14 +215,15 @@ export const updateOrderStatus = async (userId, token, orderId, status) => {
                 body: JSON.stringify({ status, orderId })
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend updateOrderStatus unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const orders = getStoredOrders();
-    const updated = orders.map(o => o._id === orderId ? { ...o, status } : o);
-    saveStoredOrders(updated);
-    return { success: true };
+    const ord = orders.find(o => o._id === orderId);
+    if (ord) {
+        ord.status = status;
+        saveStoredOrders(orders);
+    }
+    return { status, orderId };
 };
 
 export const getProducts = async () => {
@@ -237,9 +231,7 @@ export const getProducts = async () => {
         try {
             const response = await fetch(`${API}/products?limit=undefined`, { method: 'GET' });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend getProducts unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     return getStoredProducts();
 };
@@ -256,14 +248,12 @@ export const deleteProduct = async (productId, userId, token) => {
                 }
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend deleteProduct unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
-    const products = getStoredProducts();
-    const updated = products.filter(p => p._id !== productId);
-    saveStoredProducts(updated);
-    return { message: "Product deleted successfully" };
+    let products = getStoredProducts();
+    products = products.filter(p => p._id !== productId);
+    saveStoredProducts(products);
+    return { message: "Product deleted" };
 };
 
 export const getProduct = async productId => {
@@ -271,9 +261,7 @@ export const getProduct = async productId => {
         try {
             const response = await fetch(`${API}/product/${productId}`, { method: 'GET' });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend getProduct unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const products = getStoredProducts();
     return products.find(p => p._id === productId) || products[0];
@@ -291,12 +279,20 @@ export const updateProduct = async (productId, userId, token, product) => {
                 body: product
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend updateProduct unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     const products = getStoredProducts();
-    const updated = products.map(p => p._id === productId ? { ...p, ...product } : p);
-    saveStoredProducts(updated);
-    return { success: true };
+    const index = products.findIndex(p => p._id === productId);
+    if (index !== -1) {
+        if (product instanceof FormData) {
+            products[index].name = product.get("name") || products[index].name;
+            products[index].subname = product.get("subname") || products[index].subname;
+            products[index].description = product.get("description") || products[index].description;
+            products[index].price = Number(product.get("price")) || products[index].price;
+            products[index].quantity = Number(product.get("quantity")) || products[index].quantity;
+        }
+        saveStoredProducts(products);
+        return products[index];
+    }
+    return { message: "Product updated" };
 };

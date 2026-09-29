@@ -13,9 +13,7 @@ export const read = async (userId, token) => {
                 }
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend read user unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     try {
         const auth = JSON.parse(localStorage.getItem("jwt"));
@@ -37,9 +35,7 @@ export const update = async (userId, token, user) => {
                 body: JSON.stringify(user)
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend update user unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     return user;
 };
@@ -67,9 +63,7 @@ export const getPurchaseHistory = async (userId, token) => {
                 }
             });
             if (response.ok) return await response.json();
-        } catch (err) {
-            console.warn("Backend getPurchaseHistory unavailable, using local:", err);
-        }
+        } catch (err) {}
     }
     try {
         const stored = localStorage.getItem("travelyaari_orders");
