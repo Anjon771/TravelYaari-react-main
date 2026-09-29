@@ -14,22 +14,24 @@ const Orders = () => {
 
     const loadOrders = () => {
         listOrders(user._id, token).then(data => {
+            if (!data) return;
             if (data.error) {
                 console.log(data.error);
-            } else {
+            } else if (Array.isArray(data)) {
                 setOrders(data);
             }
-        });
+        }).catch(() => {});
     };
 
     const loadStatusValues = () => {
         getStatusValues(user._id, token).then(data => {
+            if (!data) return;
             if (data.error) {
                 console.log(data.error);
-            } else {
+            } else if (Array.isArray(data)) {
                 setStatusValues(data);
             }
-        });
+        }).catch(() => {});
     };
 
     useEffect(() => {

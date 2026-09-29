@@ -1,143 +1,135 @@
-@import url('https://fonts.googleapis.com/css2?family=Piedra&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Yeseva+One&display=swap');
-
-.navbar-dark{
-    background-color: #4caf50 !important;
-    min-height: 65px;
-    -webkit-box-shadow: 0 8px 6px -6px rgb(59, 58, 58);
-    -moz-box-shadow: 0 8px 6px -6px rgb(65, 62, 62);
-    box-shadow: 0 8px 6px -6px rgb(43, 42, 42);
+/* Modern Luxury Travel Navigation */
+.travelyaari-navbar {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #E5E7EB;
+  min-height: 72px;
+  padding: 0 1.5rem !important;
+  transition: all 0.2s ease-in-out;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
 }
 
-#my-nav .navbar-brand,
-.navbar-brand:hover{
-    color: white !important;
-    font-size: 32px !important;
-    font-weight: 400;
-    padding: 0 15px;
-    height: 65px;
-    line-height: 65px;
-    font-family: 'Piedra', cursive !important;
-
-}
-#my-nav .navbar-toggler {
-    float: left !important;
-}
-#my-nav .navbar-toggler {
-    margin-top: 15px;
-    padding: 9px 10px !important;
+.brand-wordmark {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 24px !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0F5132 !important;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
 }
 
-#my-nav .nav-item{
-    padding: 0.2rem !important;
-    margin: 0rem 0.2rem !important;
-    font-weight: bold;
-    font-family: 'Yeseva One', cursive !important;
-}
-#my-nav .nav-item:hover{
-    background-color: #38aa3b !important;
-}
-@media (min-width : 766px) {
-    #my-nav .navbar-brand {
-        position: absolute;
-        transform: translateX(-17%);
-        -webkit-transform: translateX(-17%);
-        -moz-transform: translateX(-17%);
-        -ms-transform: translateX(-17%);
-        -o-transform: translateX(-17%);
-        left: 15%;
-    }
-    #my-nav .navbar-collapse{
-        margin: 0;
-        margin-right: 8%;
-        padding: 0;
-    }
-}
-@media (max-width: 765px) {
-    #my-nav .navbar-collapse {
-        position: fixed;
-        top: 85px;
-        left: 0;
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-bottom: 15px;
-        width: 35%;
-        height: 60%;
-        background-color: #4caf50;
-        border: none;
-        text-align: center;
-        z-index:1000;
-    }
-    #my-nav .navbar-collapse.collapsing {
-        left: -75%;
-        transition: height 0s ease;
-        -webkit-transition: height 0s ease;
-        -moz-transition: height 0s ease;
-        -ms-transition: height 0s ease;
-        -o-transition: height 0s ease;
-    }
-    #my-nav .navbar-collapse.show {
-        left: 0;
-        transition: left 500ms ease-in-out;
-        -webkit-transition: left 500ms ease-in-out;
-        -moz-transition: left 500ms ease-in-out;
-        -ms-transition: left 500ms ease-in-out;
-        -o-transition: left 500ms ease-in-out;
-    }
-    #my-nav .navbar-toggler.collapsed~.navbar-collapse {
-        transition: left 500ms ease-in-out;
-        -webkit-transition: left 500ms ease-in-out;
-        -moz-transition: left 500ms ease-in-out;
-        -ms-transition: left 500ms ease-in-out;
-        -o-transition: left 500ms ease-in-out;
-    }
-    #my-nav .navbar-brand {
-        position: absolute;
-        transform: translateX(-50%);
-        -webkit-transform: translateX(-50%);
-        -moz-transform: translateX(-50%);
-        -ms-transform: translateX(-50%);
-        -o-transform: translateX(-50%);
-        left: 50%;
-        font-family: 'Piedra', cursive !important; 
-    }
-    #my-nav .navbar-toggler {
-        border-color: rgb(248, 246, 248) !important;
-        background-color: #4caf50 !important;
-
-    }
-    #my-nav .navbar-toggler:active {
-        border: none !important;
-        background-color: rgb(12, 240, 42) !important;
-    }
-    #my-nav .navbar-toggler:hover {
-        border: none !important;
-        background-color: rgb(118, 216, 147) !important;
-    }
-    #my-nav .navbar-toggler:visited {
-        border: none !important;
-        background-color: rgb(6, 155, 155) !important;
-    }
-    #my-nav .nav-item{
-        padding: 0.4rem 1rem !important;
-        margin: 0.2rem !important;
-        border-bottom: solid white 2px;
-    }
+.brand-wordmark:hover {
+  color: #0A3622 !important;
 }
 
-.dropdownid:hover{
-    color: #4caf50 !important;
-}
-#dropdown-basic{
-    background-color: #4caf50 !important;
-    border: none !important;
-    box-shadow: none !important;
-    margin: 0% !important;
-    padding-top: 0% important;
-    /* padding: 0% !important; */
-}
-#dropdown-basic:hover{
-    background-color:#38aa3b !important ;
+.travel-nav-link {
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: #4B5563 !important;
+  padding: 8px 14px !important;
+  margin: 0 2px;
+  position: relative;
+  transition: color 0.15s ease-in-out;
+  text-decoration: none !important;
+  white-space: nowrap;
 }
 
+.travel-nav-link:hover,
+.travel-nav-link.active-link {
+  color: #0F5132 !important;
+}
 
+.travel-nav-link.active-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background-color: #0F5132;
+  border-radius: 2px;
+}
+
+.cart-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background-color: #F7F5F0;
+  color: #1F2937 !important;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.cart-icon-btn:hover {
+  background-color: #ECE8E0;
+  color: #0F5132 !important;
+}
+
+.cart-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0F5132;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.auth-btn-signin {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151 !important;
+  padding: 7px 14px;
+  border-radius: 8px;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.auth-btn-signin:hover {
+  color: #0F5132 !important;
+}
+
+.auth-btn-signup {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF !important;
+  background-color: #0F5132;
+  padding: 7px 16px;
+  border-radius: 8px;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  border: none;
+}
+
+.auth-btn-signup:hover {
+  background-color: #0A3622;
+}
+
+/* Mobile responsive navigation */
+@media (max-width: 991px) {
+  .travelyaari-navbar .navbar-collapse {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #E5E7EB;
+  }
+}

@@ -1,112 +1,208 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Layout from '../core/Layout';
-import { signup } from '../auth';
-import './../CSS/signup.css';
-import towerimage from "./../image/signup/bg2.jpeg";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Layout from "../core/Layout";
+import { signup } from "../auth";
+import sideImage from "../assets/images/kashmir_dal_lake_shikara_1790702637557.jpg";
+
 const Signup = () => {
-    const [values, setValues] = useState({
-        name: '',
-        email: '',
-        password: '',
-        error: '',
-        success: false
-    });
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+    error: "",
+    success: false
+  });
 
-    const { name, email, password, success, error } = values;
+  const { name, email, password, success, error } = values;
 
-    const handleChange = name => event => {
-        setValues({ ...values, error: false, [name]: event.target.value });
-    };
+  const handleChange = name => event => {
+    setValues({ ...values, error: false, [name]: event.target.value });
+  };
 
-    const clickSubmit = event => {
-        event.preventDefault();
-        setValues({ ...values, error: false });
-        signup({ name, email, password }).then(data => {
-            if (data.error) {
-                setValues({ ...values, error: data.error, success: false });
-            } else {
-                setValues({
-                    ...values,
-                    name: '',
-                    email: '',
-                    password: '',
-                    error: '',
-                    success: true
-                });
-            }
+  const clickSubmit = event => {
+    event.preventDefault();
+    setValues({ ...values, error: false });
+    signup({ name, email, password }).then(data => {
+      if (!data || data.error) {
+        setValues({ ...values, error: data ? data.error : "Signup failed", success: false });
+      } else {
+        setValues({
+          ...values,
+          name: "",
+          email: "",
+          password: "",
+          error: "",
+          success: true
         });
-    };
+      }
+    }).catch(() => {
+      setValues({ ...values, error: "Signup request failed", success: false });
+    });
+  };
 
-    const signUpForm = () => (
-        <div className="container mt-2">
-        <div className="row display-flex">
-        <div className="col-xs-12 col-sm-6 col-md-5 offset-md-1 rounded-left  my-3" id="signup-form-intro">
-        <div id="signup-form-intro2" className="p-3 my-2 rounded">
-        <h2 className="my-2 p-2 text-dark font-weight-bold text-center h2 border-bottom">Signup</h2>
-            <form>
-            <div className="form-group">
-                <label className="text-dark font-weight-bold">Name</label>
-                <input onChange={handleChange('name')} type="text" className="form-control" value={name} />
+  return (
+    <Layout
+      title="Create Account - TravelYaari"
+      description="Register for a TravelYaari guest account."
+      className="p-0 m-0"
+    >
+      <div style={{ backgroundColor: "#FAF9F6", minHeight: "80vh" }} className="py-5 d-flex align-items-center">
+        <div className="container">
+          <div
+            className="row no-gutters mx-auto shadow-sm bg-white overflow-hidden"
+            style={{
+              maxWidth: "960px",
+              borderRadius: "16px",
+              border: "1px solid #E5E7EB"
+            }}
+          >
+            {/* Visual Column */}
+            <div className="col-md-5 d-none d-md-block position-relative">
+              <img
+                src={sideImage}
+                alt="Kashmir Shikara"
+                className="w-100 h-100"
+                style={{ objectFit: "cover" }}
+              />
+              <div
+                className="position-absolute"
+                style={{
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: "linear-gradient(180deg, rgba(15, 81, 50, 0.4) 0%, rgba(17, 24, 39, 0.85) 100%)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  padding: "2rem",
+                  color: "#FFFFFF"
+                }}
+              >
+                <span className="text-uppercase" style={{ fontSize: "11px", letterSpacing: "0.15em", color: "#D1D5DB" }}>
+                  Join the Circle
+                </span>
+                <h4
+                  className="font-weight-bold mt-1 mb-2 text-white"
+                  style={{ fontFamily: "var(--font-serif, 'Playfair Display', serif)" }}
+                >
+                  Embark on New Horizons
+                </h4>
+                <p style={{ fontSize: "13px", lineHeight: "1.6", color: "#E5E7EB", marginBottom: 0 }}>
+                  Unlock personalized travel recommendations, priority boutique reservations, and complimentary upgrades.
+                </p>
+              </div>
             </div>
 
-            <div className="form-group">
-                <label className="text-dark font-weight-bold">Email</label>
-                <input onChange={handleChange('email')} type="email" className="form-control" value={email} />
-            </div>
+            {/* Form Column */}
+            <div className="col-md-7 p-4 p-lg-5">
+              <div className="mb-4">
+                <span className="text-uppercase font-weight-bold" style={{ fontSize: "11px", letterSpacing: "0.15em", color: "#0F5132" }}>
+                  Guest Registration
+                </span>
+                <h2
+                  className="mt-1 font-weight-bold"
+                  style={{
+                    fontFamily: "var(--font-serif, 'Playfair Display', serif)",
+                    fontSize: "28px",
+                    color: "#111827"
+                  }}
+                >
+                  Create Your Account
+                </h2>
+                <p className="text-muted" style={{ fontSize: "14px" }}>
+                  Register to manage your stays and receive bespoke itinerary planning.
+                </p>
+              </div>
 
-            <div className="form-group">
-                <label className="text-dark font-weight-bold">Password</label>
-                <input onChange={handleChange('password')} type="password" className="form-control" value={password} />
-            </div>
-            <div className="form-group">
-                <label className="text-dark font-weight-bold">Password again</label>
-                <input type="password" className="form-control" />
-            </div>
-            <button onClick={clickSubmit} className="btn btn-success text-white btn-block font-weight-bold mt-4">
-                Submit
-            </button>
-            <div className="text-center py-3 my-2">
-                    <span className="text-white">Already have an Account ?  &nbsp;</span>
-                    <Link to="/signin" className="text-danger font-weight-bold">Signin</Link>
-            </div>
-            </form>
-            </div>
-        </div>
-            <div className="col-xs-12 col-sm-6 col-md-5 rounded-right my-3 shadow-lg" id="signup-intro">
-                <h2 className="text-white text-center my-3 p-2 h2">Welcome to TravelYaari</h2>
-                <p className="text-center text-warning py-2">We Are Happy to see you here. We are working to provide the best services to you.</p>
-                <img className="img-fluid rounded" src={towerimage} alt="signup" />
-                <div>
-                    <p className="text-center text-light py-1">By Signin, you Agree to our terms and Services. </p>
+              {error && (
+                <div className="alert alert-danger py-2 px-3 mb-3" style={{ fontSize: "13px", borderRadius: "8px" }}>
+                  <i className="fa fa-exclamation-circle mr-1"></i> {error}
                 </div>
-                <p className="h5 text-center text-white py-1 my-1 font-weight-bold">Let's Explore the World !!!!</p>
+              )}
 
+              {success && (
+                <div className="alert alert-success py-2 px-3 mb-3" style={{ fontSize: "13px", borderRadius: "8px" }}>
+                  <i className="fa fa-check-circle mr-1"></i> New account created! Please{" "}
+                  <Link to="/signin" className="font-weight-bold text-success">
+                    Sign in here
+                  </Link>.
+                </div>
+              )}
+
+              <form onSubmit={clickSubmit}>
+                <div className="form-group mb-3">
+                  <label className="font-weight-medium text-muted" style={{ fontSize: "13px" }}>
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="form-control"
+                    placeholder="e.g. Maya Sharma"
+                    value={name}
+                    onChange={handleChange("name")}
+                    style={{ borderRadius: "8px", fontSize: "14px", padding: "10px 14px" }}
+                  />
+                </div>
+
+                <div className="form-group mb-3">
+                  <label className="font-weight-medium text-muted" style={{ fontSize: "13px" }}>
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    className="form-control"
+                    placeholder="you@domain.com"
+                    value={email}
+                    onChange={handleChange("email")}
+                    style={{ borderRadius: "8px", fontSize: "14px", padding: "10px 14px" }}
+                  />
+                </div>
+
+                <div className="form-group mb-4">
+                  <label className="font-weight-medium text-muted" style={{ fontSize: "13px" }}>
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    className="form-control"
+                    placeholder="Create a secure password"
+                    value={password}
+                    onChange={handleChange("password")}
+                    style={{ borderRadius: "8px", fontSize: "14px", padding: "10px 14px" }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-block text-white py-2 font-weight-bold"
+                  style={{
+                    backgroundColor: "#0F5132",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    transition: "background-color 0.2s"
+                  }}
+                >
+                  Register Account
+                </button>
+              </form>
+
+              <div className="mt-4 pt-3 border-top text-center" style={{ fontSize: "13.5px" }}>
+                <span className="text-muted">Already registered? </span>
+                <Link to="/signin" className="font-weight-bold" style={{ color: "#0F5132" }}>
+                  Sign in here
+                </Link>
+              </div>
             </div>
-        </div>
-    </div>
-    );
 
-    const showError = () => (
-        <div className="alert alert-danger mt-3" style={{ display: error ? '' : 'none' }}>
-            {error}
+          </div>
         </div>
-    );
-
-    const showSuccess = () => (
-        <div className="alert alert-info mt-3" style={{ display: success ? '' : 'none' }}>
-            New account is created. Please <Link to="/signin">Signin</Link>
-        </div>
-    );
-
-    return (
-        <Layout
-        >
-            {showSuccess()}
-            {showError()}
-            {signUpForm()}
-        </Layout>
-    );
+      </div>
+    </Layout>
+  );
 };
 
 export default Signup;

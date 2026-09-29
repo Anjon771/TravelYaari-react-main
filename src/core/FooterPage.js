@@ -1,129 +1,180 @@
-import React from "react";
-import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const FooterPagePro = () => {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleNewsletter = e => {
+    e.preventDefault();
+    if (newsletterEmail) {
+      setSubscribed(true);
+      setNewsletterEmail("");
+    }
+  };
+
   return (
-    <MDBFooter color="blue-grey" className="page-footer font-small lighten-5 pt-0">
-      <div className="bg-success">
-        <MDBContainer>
-          <MDBRow className="py-4 d-flex align-items-center">
-            <MDBCol md="6" lg="5" className="text-center text-md-left mb-4 mb-md-0">
-              <h6 className="mb-0 white-text">
-                Get connected with us on social networks!
-              </h6>
-            </MDBCol>
-            <MDBCol md="6" lg="7" className="text-center text-md-right">
-              <Link className="fb-ic ml-0">
-                <i className="fab fa-facebook-f white-text mr-1 mr-lg-4"> </i>
-              </Link>
-              <Link className="tw-ic">
-                <i className="fab fa-twitter white-text mr-1  mr-lg-4"> </i>
-              </Link>
-              <Link className="gplus-ic">
-                <i className="fab fa-google-plus-g white-text mr-1 mr-lg-4"> </i>
-              </Link>
-              <Link className="li-ic">
-                <i className="fab fa-linkedin-in white-text mr-1 mr-lg-4"> </i>
-              </Link>
-              <Link className="ins-ic">
-                <i className="fab fa-instagram white-text mr-1 mr-lg-4"> </i>
-              </Link>
-            </MDBCol>
-          </MDBRow>
-        </MDBContainer>
+    <footer style={{ backgroundColor: "#111827", color: "#9CA3AF", borderTop: "1px solid #1F2937" }}>
+      {/* Upper Footer: Newsletter & Social */}
+      <div style={{ borderBottom: "1px solid #1F2937" }} className="py-4">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6 mb-3 mb-lg-0">
+              <h5 className="text-white mb-1" style={{ fontFamily: "var(--font-serif, 'Playfair Display', serif)", fontSize: '20px' }}>
+                Join the TravelYaari Journal
+              </h5>
+              <p className="mb-0" style={{ fontSize: "14px", color: "#9CA3AF" }}>
+                Receive private villa openings, seasonal travel essays, and exclusive escape invites.
+              </p>
+            </div>
+            <div className="col-lg-6">
+              {subscribed ? (
+                <div className="alert alert-success py-2 px-3 mb-0" style={{ fontSize: '13px', borderRadius: '8px' }}>
+                  <i className="fa fa-check mr-2"></i> Thank you for subscribing. Look out for our seasonal guide!
+                </div>
+              ) : (
+                <form onSubmit={handleNewsletter} className="d-flex">
+                  <input
+                    type="email"
+                    required
+                    value={newsletterEmail}
+                    onChange={e => setNewsletterEmail(e.target.value)}
+                    placeholder="Enter your email address..."
+                    className="form-control mr-2"
+                    style={{
+                      borderRadius: "8px",
+                      backgroundColor: "#1F2937",
+                      border: "1px solid #374151",
+                      color: "#FFFFFF",
+                      fontSize: "14px"
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    className="btn text-white font-weight-bold px-4"
+                    style={{
+                      backgroundColor: "#0F5132",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-      <MDBContainer className="mt-5 mb-4 text-center text-md-left">
-        <MDBRow className="mt-3">
-          <MDBCol md="3" lg="4" xl="3" className="mb-4 dark-grey-text">
-            <h6 className="font-weight-bold">
-              TravelYaari
+
+      {/* Main Footer Content */}
+      <div className="container py-5">
+        <div className="row">
+          
+          {/* Brand info */}
+          <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <span
+                className="d-block text-white mb-3"
+                style={{
+                  fontFamily: "var(--font-serif, 'Playfair Display', serif)",
+                  fontSize: "24px",
+                  fontWeight: "700"
+                }}
+              >
+                TravelYaari
+              </span>
+            </Link>
+            <p style={{ fontSize: "14px", lineHeight: "1.7", color: "#9CA3AF" }}>
+              Curated boutique sanctuaries, royal heritage palaces, and remote mountain chalets across India. Dedicated to transformative travel experiences and mindful hospitality.
+            </p>
+            <div className="d-flex align-items-center mt-3" style={{ gap: "12px" }}>
+              <a href="#facebook" className="text-muted" style={{ fontSize: "16px" }} aria-label="Facebook">
+                <i className="fa fa-facebook"></i>
+              </a>
+              <a href="#instagram" className="text-muted" style={{ fontSize: "16px" }} aria-label="Instagram">
+                <i className="fa fa-instagram"></i>
+              </a>
+              <a href="#twitter" className="text-muted" style={{ fontSize: "16px" }} aria-label="Twitter">
+                <i className="fa fa-twitter"></i>
+              </a>
+              <a href="#linkedin" className="text-muted" style={{ fontSize: "16px" }} aria-label="LinkedIn">
+                <i className="fa fa-linkedin"></i>
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="col-lg-2 col-md-6 mb-4 mb-lg-0">
+            <h6 className="text-white text-uppercase font-weight-bold mb-3" style={{ fontSize: "12px", letterSpacing: "0.1em" }}>
+              Experiences
             </h6>
-            <hr className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style={{ width: "70px" }} />
-            <p className="text-justify">
-            A Solution that activates the travelling bug with vibrant imagery and working on to continuously provides enjoyable quality excursions/trips on time and on budget.We Focus on  developing  enthusiastically satisfied customers all of the time.
-            </p>
-          </MDBCol>
-          <MDBCol md="2" lg="2" xl="2" className="mb-4 dark-grey-text">
-            <h6 className="text-uppercase font-weight-bold">
-              <strong>Services</strong>
+            <ul className="list-unstyled" style={{ fontSize: "14px", lineHeight: "2" }}>
+              <li><Link to="/shop" className="text-muted text-decoration-none">Hill Stations</Link></li>
+              <li><Link to="/shop" className="text-muted text-decoration-none">Coastal Resorts</Link></li>
+              <li><Link to="/shop" className="text-muted text-decoration-none">Heritage Palaces</Link></li>
+              <li><Link to="/shop" className="text-muted text-decoration-none">Spiritual Havens</Link></li>
+              <li><Link to="/gallery" className="text-muted text-decoration-none">Visual Gallery</Link></li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div className="col-lg-2 col-md-6 mb-4 mb-lg-0">
+            <h6 className="text-white text-uppercase font-weight-bold mb-3" style={{ fontSize: "12px", letterSpacing: "0.1em" }}>
+              Company
             </h6>
-            <hr className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style={{ width: "60px" }} />
-            <p>
-              <Link to="/shop" className="dark-grey-text">
-                Places
-              </Link>
-            </p>
-            <p>
-              <Link to="/gallery" className="dark-grey-text">
-                Gallery
-              </Link>
-            </p>
-            <p>
-              <Link to="/team" className="dark-grey-text">
-                Our Team
-              </Link>
-            </p>
-            <p>
-              <Link to="/about" className="dark-grey-text">
-                About Us
-              </Link>
-            </p>
-          </MDBCol>
-          <MDBCol md="3" lg="2" xl="2" className="mb-4 dark-grey-text">
-            <h6 className="text-uppercase font-weight-bold">
-              <strong>Useful links</strong>
+            <ul className="list-unstyled" style={{ fontSize: "14px", lineHeight: "2" }}>
+              <li><Link to="/about" className="text-muted text-decoration-none">Our Story</Link></li>
+              <li><Link to="/team" className="text-muted text-decoration-none">Curators & Team</Link></li>
+              <li><Link to="/contact" className="text-muted text-decoration-none">Concierge Desk</Link></li>
+              <li><Link to="/cart" className="text-muted text-decoration-none">Saved Itinerary</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact Details */}
+          <div className="col-lg-4 col-md-6">
+            <h6 className="text-white text-uppercase font-weight-bold mb-3" style={{ fontSize: "12px", letterSpacing: "0.1em" }}>
+              Concierge & Enquiries
             </h6>
-            <hr className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style={{ width: "60px" }} />
-            <p>
-              <Link to="./../user/dashboard" className="dark-grey-text">
-                Your Account
-              </Link>
-            </p>
-            <p>
-              <Link to="/cart" className="dark-grey-text">
-                Wishlist
-              </Link>
-            </p>
-            <p>
-              <Link to="/contact" className="dark-grey-text">
-                Contact Us
-              </Link>
-            </p>
-            <p>
-              <Link to="#" className="dark-grey-text">
-                Help
-              </Link>
-            </p>
-          </MDBCol>
-          <MDBCol md="4" lg="3" xl="3" className="mb-4 dark-grey-text">
-            <h6 className="text-uppercase font-weight-bold">
-              <strong>Contact</strong>
-            </h6>
-            <hr className="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style={{ width: "60px" }} />
-            <p>
-              <i className="fa fa-home mr-3" /> Gorakhpur, UP 274203, India
-            </p>
-            <p>
-              <i className="fa fa-envelope mr-3" /> info@travelyaari.com
-            </p>
-            <p>
-              <i className="fa fa-phone mr-3" /> + 01 234 567 88
-            </p>
-            <p>
-              <i className="fa fa-print mr-3" /> + 01 234 567 89
-            </p>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-      <div className="footer-copyright text-center py-3 bg-success">
-        <MDBContainer fluid>
-          &copy; {new Date().getFullYear()} Copyright:{" "}
-          <a href="https://github.com/shsarv"> www.travelyaari.com</a>
-        </MDBContainer>
+            <ul className="list-unstyled" style={{ fontSize: "13.5px", lineHeight: "2" }}>
+              <li className="d-flex align-items-baseline mb-2">
+                <i className="fa fa-map-marker text-success mr-2"></i>
+                <span>Heritage Trail Complex, Civil Lines, Gorakhpur, UP 274203</span>
+              </li>
+              <li className="d-flex align-items-center mb-2">
+                <i className="fa fa-envelope text-success mr-2"></i>
+                <span>concierge@travelyaari.com</span>
+              </li>
+              <li className="d-flex align-items-center mb-2">
+                <i className="fa fa-phone text-success mr-2"></i>
+                <span>+91 98765 43210 / 1800-TY-ESCAPE</span>
+              </li>
+              <li className="d-flex align-items-center">
+                <i className="fa fa-clock-o text-success mr-2"></i>
+                <span>Concierge Desk: 24/7 Priority Support</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
       </div>
-    </MDBFooter>
+
+      {/* Bottom Copyright */}
+      <div className="py-3 text-center" style={{ borderTop: "1px solid #1F2937", fontSize: "13px", color: "#6B7280" }}>
+        <div className="container d-flex flex-wrap justify-content-between align-items-center">
+          <span>&copy; {new Date().getFullYear()} TravelYaari Hospitality Private Limited. All rights reserved.</span>
+          <div className="d-flex" style={{ gap: "16px" }}>
+            <span className="text-muted">Privacy Policy</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-muted">Terms of Reservation</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-muted">Guest Safety Standards</span>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
-}
+};
 
 export default FooterPagePro;

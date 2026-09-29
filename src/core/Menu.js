@@ -1,181 +1,163 @@
-/* eslint-disable no-unused-vars */
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth";
-// eslint-disable-next-line
 import { itemTotal } from "./cartHelpers";
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+import "../CSS/menu.css";
 
-const isActive = (history, path) => {
-    if (history.location.pathname === path) {
-        return { color: "#ff9900" };
-    } else {
-        return { color: "white" };
-    }
-};
+const Menu = ({ history }) => {
+  const [navCollapsed, setNavCollapsed] = useState(true);
 
+  const isActive = path => {
+    return history.location.pathname.toLowerCase() === path.toLowerCase();
+  };
 
-const Menu = ({ history }) => (
-    <nav className="navbar navbar-expand-md navbar-dark" id="my-nav">
-        <Link className="navbar-brand" to="/">TravelYaari</Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
+  const handleToggle = () => {
+    setNavCollapsed(!navCollapsed);
+  };
+
+  const closeNav = () => {
+    setNavCollapsed(true);
+  };
+
+  const auth = isAuthenticated();
+
+  return (
+    <nav className="navbar navbar-expand-lg travelyaari-navbar">
+      <div className="container-fluid d-flex align-items-center justify-content-between p-0">
+        
+        {/* Zone 1: Single text element wordmark */}
+        <Link className="brand-wordmark mr-4" to="/" onClick={closeNav}>
+          TravelYaari
+        </Link>
+
+        {/* Mobile menu toggle */}
+        <button
+          className="navbar-toggler p-2 border-0"
+          type="button"
+          onClick={handleToggle}
+          aria-controls="travelyaariNav"
+          aria-expanded={!navCollapsed}
+          aria-label="Toggle navigation"
+          style={{ outline: "none", color: "#0F5132" }}
+        >
+          <i className={`fa ${navCollapsed ? "fa-bars" : "fa-times"}`} style={{ fontSize: "20px" }}></i>
         </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ml-auto">
-            {!isAuthenticated() && (
-                <Fragment>
-                    <li className="nav-item">
-                        <a
-                            className="nav-link text-white"
-                            href="/#home-popularplace"
-                        >
-                            Popular Places
-                        </a>
-                    </li>
 
-                    <li className="nav-item">
-                    <a
-                            className="nav-link text-white"
-                            href="/#homegallery"
-                        >
-                            Gallery
-                        </a>
-                    </li>
-                </Fragment>
-            )}
-            {isAuthenticated() && (
-                <li className="nav-item">
-                <Link
-                    className="nav-link"
-                    style={isActive(history, "/shop")}
-                    to="/Shop"
-                >All places
-                </Link>
-            </li>
-            )}
-            
-            {isAuthenticated() && (
-                <li className="nav-item">
-                <Link
-                    className="nav-link"
-                    style={isActive(history, "/gallery")}
-                    to="/Gallery"
-                >Gallery
-                </Link>
-            </li>
-            )}
-
-            {isAuthenticated() && isAuthenticated().user.role === 0 && (
-                <li className="nav-item">
-                    <Link
-                        className="nav-link"
-                        style={isActive(history, "/user/dashboard")}
-                        to="/user/dashboard"
-                    >
-                        Dashboard
-                    </Link>
-                </li>
-            )}
-
-            {isAuthenticated() && isAuthenticated().user.role === 1 && (
-                <li className="nav-item">
-                    <Link
-                        className="nav-link"
-                        style={isActive(history, "/admin/dashboard")}
-                        to="/admin/dashboard"
-                    >
-                        Dashboard
-                    </Link>
-                </li>
-            )}
-
-            {!isAuthenticated() && (
-                <Fragment>
-                    <li className="nav-item">
-                        <Link
-                            className="nav-link"
-                            style={isActive(history, "/signin")}
-                            to="/signin"
-                        >
-                            Signin
-                        </Link>
-                    </li>
-
-                    <li className="nav-item">
-                        <Link
-                            className="nav-link"
-                            style={isActive(history, "/signup")}
-                            to="/signup"
-                        >
-                            Signup
-                        </Link>
-                    </li>
-                </Fragment>
-            )}
+        {/* Collapsible Container */}
+        <div className={`collapse navbar-collapse ${!navCollapsed ? "show" : ""}`} id="travelyaariNav">
+          
+          {/* Zone 2: 4-6 clean text navigation links */}
+          <ul className="navbar-nav mx-auto align-items-lg-center">
             <li className="nav-item">
-                <Link
-                    className="nav-link"
-                    style={isActive(history, "/cart")}
-                    to="/cart"
-                >
-                    Added Place{" "}
-                    <sup>
-                        <small className="cart-badge">{itemTotal()}</small>
-                    </sup>
-                </Link>
+              <Link
+                className={`travel-nav-link ${isActive("/shop") ? "active-link" : ""}`}
+                to="/shop"
+                onClick={closeNav}
+              >
+                Destinations
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`travel-nav-link ${isActive("/gallery") ? "active-link" : ""}`}
+                to="/gallery"
+                onClick={closeNav}
+              >
+                Gallery
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`travel-nav-link ${isActive("/about") ? "active-link" : ""}`}
+                to="/about"
+                onClick={closeNav}
+              >
+                About Us
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`travel-nav-link ${isActive("/team") ? "active-link" : ""}`}
+                to="/team"
+                onClick={closeNav}
+              >
+                Our Team
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`travel-nav-link ${isActive("/contact") ? "active-link" : ""}`}
+                to="/contact"
+                onClick={closeNav}
+              >
+                Contact
+              </Link>
             </li>
 
-            {isAuthenticated() && (
-                <li className="nav-item">
-                    <span
-                        className="nav-link"
-                        style={{ cursor: "pointer", color: "#ffffff" }}
-                        onClick={() =>
-                            signout(() => {
-                                history.push("/");
-                            })
-                        }
-                    >Signout
-                    </span>
-                </li>
+            {/* Dashboard if authenticated */}
+            {auth && auth.user && auth.user.role === 1 && (
+              <li className="nav-item">
+                <Link
+                  className={`travel-nav-link ${isActive("/admin/dashboard") ? "active-link" : ""}`}
+                  to="/admin/dashboard"
+                  onClick={closeNav}
+                >
+                  Admin Console
+                </Link>
+              </li>
             )}
-            {isAuthenticated() && (
-                <li className="nav-item">
-                <Dropdown className="m-0 p-0">
-                <Dropdown.Toggle  id="dropdown-basic" className="font-weight-bold">
-                More
-                </Dropdown.Toggle>
-                <Dropdown.Menu style={{background:'#4caf50',border:'none'}}>
-                <Dropdown.Item as ="button"><Link
-                            className="nav-link text-white dropdownid"
-                            style={isActive(history, "/about")}
-                            to="/about"
-                        >
-                            about Us
-                        </Link></Dropdown.Item>
-                <Dropdown.Item href="#/action-2"><Link
-                            className="nav-link dropdownid"
-                            style={isActive(history, "/team")}
-                            to="/team"
-                        >
-                            Our Team
-                        </Link></Dropdown.Item>
-                <Dropdown.Item href="#/action-3"><Link
-                            className="nav-link dropdownid"
-                            style={isActive(history, "/contact")}
-                            to="/contact"
-                        >Contact Us
-                        </Link></Dropdown.Item>
-                </Dropdown.Menu>
-                </Dropdown>
-            </li>
+            {auth && auth.user && auth.user.role === 0 && (
+              <li className="nav-item">
+                <Link
+                  className={`travel-nav-link ${isActive("/user/dashboard") ? "active-link" : ""}`}
+                  to="/user/dashboard"
+                  onClick={closeNav}
+                >
+                  My Bookings
+                </Link>
+              </li>
             )}
-            
-        </ul>
-    </div>
-</nav>
-);
+          </ul>
+
+          {/* Zone 3: 1-2 primary actions */}
+          <div className="d-flex align-items-center flex-wrap gap-2 mt-3 mt-lg-0">
+            {/* Cart / Saved Stays */}
+            <Link className="cart-icon-btn mr-2" to="/cart" onClick={closeNav} title="Saved Destinations & Itinerary">
+              <i className="fa fa-suitcase mr-1" style={{ fontSize: "14px", color: "#0F5132" }}></i>
+              <span>Itinerary</span>
+              <span className="cart-counter">{itemTotal()}</span>
+            </Link>
+
+            {/* Auth Buttons */}
+            {!auth ? (
+              <Fragment>
+                <Link className="auth-btn-signin mr-1" to="/signin" onClick={closeNav}>
+                  Sign In
+                </Link>
+                <Link className="auth-btn-signup" to="/signup" onClick={closeNav}>
+                  Register
+                </Link>
+              </Fragment>
+            ) : (
+              <button
+                className="btn btn-sm btn-outline-danger"
+                style={{ borderRadius: '8px', fontSize: '13px', fontWeight: '500', padding: '6px 12px' }}
+                onClick={() => {
+                  signout(() => {
+                    closeNav();
+                    history.push("/");
+                  });
+                }}
+              >
+                <i className="fa fa-sign-out mr-1"></i> Sign Out
+              </button>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </nav>
+  );
+};
 
 export default withRouter(Menu);

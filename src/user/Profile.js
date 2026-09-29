@@ -18,14 +18,13 @@ const Profile = ({ match }) => {
     const { name, email, password, error, success } = values;
 
     const init = userId => {
-        // console.log(userId);
         read(userId, token).then(data => {
-            if (data.error) {
-                setValues({ ...values, error: true });
+            if (!data || data.error) {
+                setValues(v => ({ ...v, error: true }));
             } else {
-                setValues({ ...values, name: data.name, email: data.email });
+                setValues(v => ({ ...v, name: data.name, email: data.email }));
             }
-        });
+        }).catch(() => {});
     };
 
     useEffect(() => {
@@ -40,20 +39,19 @@ const Profile = ({ match }) => {
     const clickSubmit = e => {
         e.preventDefault();
         update(match.params.userId, token, { name, email, password }).then(data => {
-            if (data.error) {
-                // console.log(data.error);
-                alert(data.error);
+            if (!data || data.error) {
+                alert(data ? data.error : "Update failed");
             } else {
                 updateUser(data, () => {
-                    setValues({
-                        ...values,
+                    setValues(v => ({
+                        ...v,
                         name: data.name,
                         email: data.email,
                         success: true
-                    });
+                    }));
                 });
             }
-        });
+        }).catch(() => {});
     };
 
     const redirectUser = success => {

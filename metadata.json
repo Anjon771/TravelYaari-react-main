@@ -1,0 +1,5 @@
+{
+  "name": "TravelYaari",
+  "description": "Travel and resort booking web application",
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

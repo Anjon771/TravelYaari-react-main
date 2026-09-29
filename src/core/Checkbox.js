@@ -1,31 +1,57 @@
 import React, { useState } from "react";
-import './../CSS/checkbox.css';
 
 const CheckBox = ({ categories, handleFilters }) => {
-    // eslint-disable-next-line
-    const [value, setValue] = useState(0);
+  const [selected, setSelected] = useState("");
 
-    const handleChange = event => {
-        handleFilters(event.target.value);
-        setValue(event.target.value);
-    };
+  const handleSelect = (categoryId) => {
+    const nextVal = selected === categoryId ? "" : categoryId;
+    setSelected(nextVal);
+    handleFilters(nextVal ? [nextVal] : []);
+  };
 
-    return categories.map((c, i) => (
-        <div className="col-md-2 col-sm-4 col-xs-4" style={{height:"max-content"}}>
-        <div key={i} className="category-toolbar form-check form-check-inline my-2 w-100 bg-success rounded border">
-        <label className="form-check-label py-2 d-inline rounded shadow-lg font-weight-bold text-white w-100 text-center">
-            <input
-                onChange={handleChange}
-                value={`${c._id}`}
-                name={c}
-                type="radio"
-                className="mr-2 ml-4"
-            />
-            {c.name}
-        </label>
-        </div>
-        </div>
-    ));
+  return (
+    <div className="d-flex flex-column" style={{ gap: "8px" }}>
+      <button
+        type="button"
+        onClick={() => handleSelect("")}
+        className="d-flex align-items-center justify-content-between p-2 rounded text-left border-0"
+        style={{
+          backgroundColor: selected === "" ? "#E8F5E9" : "transparent",
+          color: selected === "" ? "#0F5132" : "#4B5563",
+          fontWeight: selected === "" ? "600" : "400",
+          fontSize: "14px",
+          transition: "all 0.15s ease",
+          cursor: "pointer"
+        }}
+      >
+        <span>All Experiences</span>
+        {selected === "" && <i className="fa fa-check text-success" style={{ fontSize: "12px" }}></i>}
+      </button>
+
+      {categories.map((c, i) => {
+        const isCurrent = selected === c._id;
+        return (
+          <button
+            key={i}
+            type="button"
+            onClick={() => handleSelect(c._id)}
+            className="d-flex align-items-center justify-content-between p-2 rounded text-left border-0"
+            style={{
+              backgroundColor: isCurrent ? "#E8F5E9" : "transparent",
+              color: isCurrent ? "#0F5132" : "#4B5563",
+              fontWeight: isCurrent ? "600" : "400",
+              fontSize: "14px",
+              transition: "all 0.15s ease",
+              cursor: "pointer"
+            }}
+          >
+            <span>{c.name}</span>
+            {isCurrent && <i className="fa fa-check text-success" style={{ fontSize: "12px" }}></i>}
+          </button>
+        );
+      })}
+    </div>
+  );
 };
 
 export default CheckBox;
